@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Finanças - Miguel</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">💰 Finanças do Miguel</div>
+    <div class="nav-links">
+      <a href="index.html" class="active">Resumo</a>
+      <a href="pages/contas-fixas.html">Contas Fixas</a>
+      <a href="pages/compras.html">Compras</a>
+      <a href="pages/financiamentos.html">Financiamentos</a>
+      <a href="pages/investimentos.html">Investimentos</a>
+    </div>
+    <div class="nav-month" id="mesAtual"></div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="container">
+
+    <!-- CARDS TOPO -->
+    <section class="cards-grid">
+
+      <div class="card">
+        <span class="card-label">SALÁRIO MIGUEL</span>
+        <span class="card-value" id="salarioMiguel">R$ 0,00</span>
+        <button class="btn-edit" onclick="editarValor('salarioMiguel')">✏️ Editar</button>
+      </div>
+
+      <div class="card">
+        <span class="card-label">TOTAL RECEITAS</span>
+        <span class="card-value green" id="totalReceitas">R$ 0,00</span>
+      </div>
+
+      <div class="card">
+        <span class="card-label">TOTAL FIXAS</span>
+        <span class="card-value red" id="totalFixas">R$ 0,00</span>
+      </div>
+
+      <div class="card">
+        <span class="card-label">TOTAL GASTOS</span>
+        <span class="card-value red" id="totalGastos">R$ 0,00</span>
+        <span class="card-badge" id="badgeGastos"></span>
+      </div>
+
+      <div class="card">
+        <span class="card-label">TRANSAÇÕES</span>
+        <span class="card-value" id="totalTransacoes">0</span>
+        <span class="card-sub" id="mesTransacoes"></span>
+      </div>
+
+      <div class="card card-saldo">
+        <span class="card-label">SALDO DO MÊS</span>
+        <span class="card-value" id="saldoMes">R$ 0,00</span>
+      </div>
+
+    </section>
+
+    <!-- GRÁFICO TENDÊNCIA -->
+    <section class="chart-section">
+      <h2 class="chart-title">Tendência 6 Meses</h2>
+      <div class="chart-wrapper">
+        <canvas id="chartTendencia"></canvas>
+      </div>
+    </section>
+
+    <!-- GRÁFICO PIZZA -->
+    <section class="charts-row">
+      <div class="chart-box">
+        <h2 class="chart-title">Distribuição de Gastos</h2>
+        <div class="chart-wrapper-sm">
+          <canvas id="chartPizza"></canvas>
+        </div>
+      </div>
+      <div class="chart-box">
+        <h2 class="chart-title">Últimas Transações</h2>
+        <div class="transacoes-list" id="listaTransacoes">
+          <p class="empty-msg">Nenhuma transação ainda.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
