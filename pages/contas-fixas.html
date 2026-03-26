@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contas Fixas - Miguel</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../pages.css"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">💰 Finanças do Miguel</div>
+    <div class="nav-links">
+      <a href="../index.html">Resumo</a>
+      <a href="contas-fixas.html" class="active">Contas Fixas</a>
+      <a href="compras.html">Compras</a>
+      <a href="financiamentos.html">Financiamentos</a>
+      <a href="investimentos.html">Investimentos</a>
+    </div>
+    <div class="nav-month" id="mesAtual"></div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-header">
+      <h1 class="page-title">🏠 Contas Fixas</h1>
+      <span class="page-total" id="totalFixas">Total: R$ 0,00</span>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h2 class="form-title">Adicionar Conta Fixa</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome da Conta</label>
+          <input type="text" id="nomeFixa" placeholder="Ex: Aluguel, Internet..."/>
+        </div>
+        <div class="form-group">
+          <label>Valor (R$)</label>
+          <input type="number" id="valorFixa" placeholder="0,00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label>Vencimento (dia)</label>
+          <input type="number" id="vencFixa" placeholder="Ex: 10" min="1" max="31"/>
+        </div>
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="catFixa">
+            <option value="Moradia">🏠 Moradia</option>
+            <option value="Utilidades">💡 Utilidades</option>
+            <option value="Assinatura">📱 Assinatura</option>
+            <option value="Saúde">❤️ Saúde</option>
+            <option value="Educação">📚 Educação</option>
+            <option value="Transporte">🚗 Transporte</option>
+            <option value="Outro">📦 Outro</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="adicionarFixa()">+ Adicionar</button>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Vencimento</th>
+            <th>Valor</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaFixas">
+          <tr><td colspan="6" class="empty-msg">Nenhuma conta fixa cadastrada.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script src="../app.js"></script>
+  <script src="../pages.js"></script>
+  <script>initContasFixas();</script>
+</body>
+</html>
