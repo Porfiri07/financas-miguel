@@ -2,20 +2,22 @@
 function getDados() {
   return JSON.parse(localStorage.getItem('financasMiguel')) || {
     salario: 0,
-    contasFixas: [],
     compras: [],
+    contasFixas: [],
     financiamentos: [],
     investimentos: [],
-    historico: [
-      { mes: 'Out/25', total: 7500 },
-      { mes: 'Nov/25', total: 7300 },
-      { mes: 'Dez/25', total: 6800 },
-      { mes: 'Jan/26', total: 6200 },
-      { mes: 'Fev/26', total: 5900 },
-      { mes: 'Mar/26', total: 5400 },
-    ]
+    historico: []
   };
 }
+
+function salvarDados(dados) {
+  localStorage.setItem('financasMiguel', JSON.stringify(dados));
+}
+
+function formatBRL(val) {
+  return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
 
 function salvarDados(dados) {
   localStorage.setItem('financasMiguel', JSON.stringify(dados));
