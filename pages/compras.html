@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Compras do Mês - Miguel</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../pages.css"/>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">💰 Finanças do Miguel</div>
+    <div class="nav-links">
+      <a href="../index.html">Resumo</a>
+      <a href="contas-fixas.html">Contas Fixas</a>
+      <a href="compras.html" class="active">Compras</a>
+      <a href="financiamentos.html">Financiamentos</a>
+      <a href="investimentos.html">Investimentos</a>
+    </div>
+    <div class="nav-month" id="mesAtual"></div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-header">
+      <h1 class="page-title">🛒 Compras do Mês</h1>
+      <span class="page-total" id="totalCompras">Total: R$ 0,00</span>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h2 class="form-title">Adicionar Compra</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Descrição</label>
+          <input type="text" id="descCompra" placeholder="Ex: Supermercado, Farmácia..."/>
+        </div>
+        <div class="form-group">
+          <label>Valor (R$)</label>
+          <input type="number" id="valorCompra" placeholder="0,00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label>Data</label>
+          <input type="date" id="dataCompra"/>
+        </div>
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="catCompra">
+            <option value="Alimentação">🍔 Alimentação</option>
+            <option value="Mercado">🛒 Mercado</option>
+            <option value="Saúde">❤️ Saúde</option>
+            <option value="Lazer">🎮 Lazer</option>
+            <option value="Vestuário">👕 Vestuário</option>
+            <option value="Transporte">🚗 Transporte</option>
+            <option value="Tecnologia">💻 Tecnologia</option>
+            <option value="Outro">📦 Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Forma de Pagamento</label>
+          <select id="pagCompra">
+            <option value="Débito">💳 Débito</option>
+            <option value="Crédito">💳 Crédito</option>
+            <option value="Pix">⚡ Pix</option>
+            <option value="Dinheiro">💵 Dinheiro</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="adicionarCompra()">+ Adicionar</button>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="filter-bar">
+      <select id="filtroCategoria" onchange="renderCompras()">
+        <option value="">Todas as categorias</option>
+        <option value="Alimentação">🍔 Alimentação</option>
+        <option value="Mercado">🛒 Mercado</option>
+        <option value="Saúde">❤️ Saúde</option>
+        <option value="Lazer">🎮 Lazer</option>
+        <option value="Vestuário">👕 Vestuário</option>
+        <option value="Transporte">🚗 Transporte</option>
+        <option value="Tecnologia">💻 Tecnologia</option>
+        <option value="Outro">📦 Outro</option>
+      </select>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Categoria</th>
+            <th>Data</th>
+            <th>Pagamento</th>
+            <th>Valor</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCompras">
+          <tr><td colspan="6" class="empty-msg">Nenhuma compra registrada.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script src="../app.js"></script>
+  <script src="../pages.js"></script>
+  <script>initCompras();</script>
+</body>
+</html>
