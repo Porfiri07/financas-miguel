@@ -1,94 +1,559 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Finanças - Miguel</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+  <style>
+    /* ── TOPBAR ── */
+    .topbar {
+      background: #111827;
+      border-bottom: 1px solid #1f2937;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #10b981;
+      letter-spacing: 0.5px;
+    }
+    .topbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .topbar-select {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: #e5e7eb;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .topbar-select:focus { border-color: #10b981; }
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="nav-logo">💰 Finanças do Miguel</div>
-    <div class="nav-links">
-      <a href="index.html" class="active">Resumo</a>
-      <a href="pages/contas-fixas.html">Contas Fixas</a>
-      <a href="pages/compras.html">Compras</a>
-      <a href="pages/financiamentos.html">Financiamentos</a>
-      <a href="pages/investimentos.html">Investimentos</a>
+    /* TABS PILL */
+    .tabs-pill {
+      display: flex;
+      background: #1f2937;
+      border-radius: 30px;
+      padding: 4px;
+      gap: 2px;
+    }
+    .tab-pill {
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .tab-pill.active {
+      background: #10b981;
+      color: #000;
+      box-shadow: 0 2px 12px rgba(16,185,129,0.35);
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid #374151;
+      color: #6b7280;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { border-color: #f87171; color: #f87171; }
+
+    /* ── CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.3), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(16,185,129,0.12);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .card-label {
+      font-size: 0.7rem;
+      color: #6b7280;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+    .card-icon.green  { background: rgba(16,185,129,0.15); }
+    .card-icon.blue   { background: rgba(59,130,246,0.15); }
+    .card-icon.purple { background: rgba(139,92,246,0.15); }
+    .card-icon.red    { background: rgba(248,113,113,0.15); }
+    .card-icon.yellow { background: rgba(251,191,36,0.15); }
+    .card-value {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #f9fafb;
+      line-height: 1;
+    }
+    .card-value.green  { color: #10b981; }
+    .card-value.red    { color: #f87171; }
+    .card-sub {
+      font-size: 0.75rem;
+      color: #4b5563;
+    }
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      width: fit-content;
+    }
+    .card-badge.up   { background: rgba(16,185,129,0.15); color: #10b981; }
+    .card-badge.down { background: rgba(248,113,113,0.15); color: #f87171; }
+
+    /* ── CHART ── */
+    .chart-card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chart-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .chart-wrap { height: 240px; position: relative; }
+
+    /* ── TRANSACTIONS ── */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #e5e7eb;
+    }
+    .btn-add {
+      background: #10b981;
+      color: #000;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-add:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .trans-table-wrap {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      overflow: hidden;
+      overflow-x: auto;
+    }
+    .trans-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+    .trans-table thead tr { background: #1f2937; }
+    .trans-table th {
+      padding: 13px 18px;
+      text-align: left;
+      color: #6b7280;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .trans-table td {
+      padding: 13px 18px;
+      border-top: 1px solid #1f2937;
+      color: #e5e7eb;
+    }
+    .trans-table tbody tr {
+      transition: background 0.15s;
+    }
+    .trans-table tbody tr:hover { background: #1a2332; }
+    .cat-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(16,185,129,0.1);
+      color: #10b981;
+    }
+    .val-neg { color: #f87171; font-weight: 700; }
+    .val-pos { color: #10b981; font-weight: 700; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 480px;
+      transform: translateY(20px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f9fafb;
+      margin-bottom: 20px;
+    }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .modal-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .modal-group.full { grid-column: 1 / -1; }
+    .modal-group label {
+      font-size: 0.72rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .modal-group input,
+    .modal-group select {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      color: #f9fafb;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .modal-group input:focus,
+    .modal-group select:focus { border-color: #10b981; }
+    .modal-group select option { background: #1f2937; }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid #374151;
+      color: #6b7280;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: #f87171; color: #f87171; }
+    .btn-confirm {
+      background: #10b981;
+      color: #000;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-confirm:hover { opacity: 0.85; }
+
+    /* ── BOTTOM NAV (mobile) ── */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #111827;
+      border-top: 1px solid #1f2937;
+      padding: 10px 0 20px;
+      z-index: 100;
+    }
+    .bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+    }
+    .bnav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #4b5563;
+      font-size: 0.65rem;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .bnav-item.active, .bnav-item:hover { color: #10b981; }
+    .bnav-icon { font-size: 1.3rem; }
+
+    @media (max-width: 640px) {
+      .bottom-nav { display: block; }
+      .container  { padding-bottom: 80px; }
+      .topbar     { padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body style="background:#0b0f14; color:#e5e7eb; font-family:'Segoe UI',sans-serif; min-height:100vh;">
+
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <div class="topbar-logo">💰 Finanças do Miguel</div>
+    <div class="topbar-controls">
+      <select class="topbar-select" id="selectAno" onchange="renderDashboard()"></select>
+      <select class="topbar-select" id="selectMes" onchange="renderDashboard()"></select>
+      <div class="tabs-pill">
+        <button class="tab-pill active" onclick="setTab('todos',this)">Todos</button>
+        <button class="tab-pill" onclick="setTab('dia15',this)">Dia 15</button>
+        <button class="tab-pill" onclick="setTab('dia25',this)">Dia 25</button>
+      </div>
     </div>
-    <div class="nav-month" id="mesAtual"></div>
+    <div class="topbar-right">
+      <button class="btn-logout" onclick="sair()">🚪 Sair</button>
+    </div>
   </nav>
 
   <!-- MAIN -->
-  <main class="container">
+  <main class="container" style="max-width:1200px;margin:0 auto;padding:24px 20px;display:flex;flex-direction:column;gap:24px;">
 
-    <!-- CARDS TOPO -->
-    <section class="cards-grid">
+    <!-- CARDS -->
+    <section class="cards-grid" id="cardsGrid"></section>
 
-      <div class="card">
-        <span class="card-label">SALÁRIO MIGUEL</span>
-        <span class="card-value" id="salarioMiguel">R$ 0,00</span>
-        <button class="btn-edit" onclick="editarValor('salarioMiguel')">✏️ Editar</button>
-      </div>
-
-      <div class="card">
-        <span class="card-label">TOTAL RECEITAS</span>
-        <span class="card-value green" id="totalReceitas">R$ 0,00</span>
-      </div>
-
-      <div class="card">
-        <span class="card-label">TOTAL FIXAS</span>
-        <span class="card-value red" id="totalFixas">R$ 0,00</span>
-      </div>
-
-      <div class="card">
-        <span class="card-label">TOTAL GASTOS</span>
-        <span class="card-value red" id="totalGastos">R$ 0,00</span>
-        <span class="card-badge" id="badgeGastos"></span>
-      </div>
-
-      <div class="card">
-        <span class="card-label">TRANSAÇÕES</span>
-        <span class="card-value" id="totalTransacoes">0</span>
-        <span class="card-sub" id="mesTransacoes"></span>
-      </div>
-
-      <div class="card card-saldo">
-        <span class="card-label">SALDO DO MÊS</span>
-        <span class="card-value" id="saldoMes">R$ 0,00</span>
-      </div>
-
-    </section>
-
-    <!-- GRÁFICO TENDÊNCIA -->
-    <section class="chart-section">
-      <h2 class="chart-title">Tendência 6 Meses</h2>
-      <div class="chart-wrapper">
-        <canvas id="chartTendencia"></canvas>
-      </div>
-    </section>
-
-    <!-- GRÁFICO PIZZA -->
-    <section class="charts-row">
-      <div class="chart-box">
-        <h2 class="chart-title">Distribuição de Gastos</h2>
-        <div class="chart-wrapper-sm">
-          <canvas id="chartPizza"></canvas>
+    <!-- CHART -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <span class="chart-title">📈 Tendência 6 Meses</span>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#10b981"></div> Gastos
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#3b82f6"></div> Receita
+          </div>
         </div>
       </div>
-      <div class="chart-box">
-        <h2 class="chart-title">Últimas Transações</h2>
-        <div class="transacoes-list" id="listaTransacoes">
-          <p class="empty-msg">Nenhuma transação ainda.</p>
-        </div>
+      <div class="chart-wrap"><canvas id="chartTendencia"></canvas></div>
+    </div>
+
+    <!-- TRANSACTIONS -->
+    <div>
+      <div class="section-header">
+        <span class="section-title">🧾 Transações</span>
+        <button class="btn-add" onclick="abrirModal()">+ Nova Transação</button>
       </div>
-    </section>
+      <div class="trans-table-wrap">
+        <table class="trans-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Descrição</th>
+              <th>Categoria</th>
+              <th>Pagamento</th>
+              <th>Valor</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabelaTrans"></tbody>
+        </table>
+      </div>
+    </div>
 
   </main>
 
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <a href="index.html" class="bnav-item active">
+        <span class="bnav-icon">🏠</span> Início
+      </a>
+      <a href="pages/contas-fixas.html" class="bnav-item">
+        <span class="bnav-icon">📋</span> Fixas
+      </a>
+      <a href="pages/compras.html" class="bnav-item">
+        <span class="bnav-icon">🛒</span> Compras
+      </a>
+      <a href="pages/financiamentos.html" class="bnav-item">
+        <span class="bnav-icon">💳</span> Financ.
+      </a>
+      <a href="pages/investimentos.html" class="bnav-item">
+        <span class="bnav-icon">📈</span> Invest.
+      </a>
+    </div>
+  </nav>
+
+  <!-- MODAL NOVA TRANSAÇÃO -->
+  <div class="modal-overlay" id="modalOverlay" onclick="fecharModalFora(event)">
+    <div class="modal">
+      <div class="modal-title">➕ Nova Transação</div>
+      <div class="modal-grid">
+        <div class="modal-group full">
+          <label>Descrição</label>
+          <input type="text" id="tDesc" placeholder="Ex: Supermercado, Salário..."/>
+        </div>
+        <div class="modal-group">
+          <label>Valor (R$)</label>
+          <input type="number" id="tValor" placeholder="0,00" step="0.01"/>
+        </div>
+        <div class="modal-group">
+          <label>Data</label>
+          <input type="date" id="tData"/>
+        </div>
+        <div class="modal-group">
+          <label>Tipo</label>
+          <select id="tTipo">
+            <option value="despesa">💸 Despesa</option>
+            <option value="receita">💰 Receita</option>
+          </select>
+        </div>
+        <div class="modal-group">
+          <label>Categoria</label>
+          <select id="tCat">
+            <option value="Alimentação">🍔 Alimentação</option>
+            <option value="Mercado">🛒 Mercado</option>
+            <option value="Transporte">🚗 Transporte</option>
+            <option value="Saúde">❤️ Saúde</option>
+            <option value="Lazer">🎮 Lazer</option>
+            <option value="Educação">📚 Educação</option>
+            <option value="Vestuário">👕 Vestuário</option>
+            <option value="Salário">💼 Salário</option>
+            <option value="Investimento">📈 Investimento</option>
+            <option value="Outro">📦 Outro</option>
+          </select>
+        </div>
+        <div class="modal-group">
+          <label>Pagamento</label>
+          <select id="tPag">
+            <option value="Pix">⚡ Pix</option>
+            <option value="Débito">💳 Débito</option>
+            <option value="Crédito">💳 Crédito</option>
+            <option value="Dinheiro">💵 Dinheiro</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="salvarTransacao()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
+  <script src="dashboard.js"></script>
 </body>
 </html>
