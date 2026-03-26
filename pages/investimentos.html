@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Investimentos - Miguel</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="../pages.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">💰 Finanças do Miguel</div>
+    <div class="nav-links">
+      <a href="../index.html">Resumo</a>
+      <a href="contas-fixas.html">Contas Fixas</a>
+      <a href="compras.html">Compras</a>
+      <a href="financiamentos.html">Financiamentos</a>
+      <a href="investimentos.html" class="active">Investimentos</a>
+    </div>
+    <div class="nav-month" id="mesAtual"></div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-header">
+      <h1 class="page-title">📈 Investimentos</h1>
+      <span class="page-total" id="totalInvest">Total: R$ 0,00</span>
+    </div>
+
+    <!-- CARDS RESUMO -->
+    <div class="cards-grid">
+      <div class="card">
+        <span class="card-label">TOTAL INVESTIDO</span>
+        <span class="card-value green" id="totalInvestido">R$ 0,00</span>
+      </div>
+      <div class="card">
+        <span class="card-label">RENDIMENTO TOTAL</span>
+        <span class="card-value green" id="totalRendimento">R$ 0,00</span>
+      </div>
+      <div class="card">
+        <span class="card-label">PATRIMÔNIO ATUAL</span>
+        <span class="card-value" id="patrimonioAtual">R$ 0,00</span>
+      </div>
+    </div>
+
+    <!-- GRÁFICO -->
+    <div class="chart-section">
+      <h2 class="chart-title">Distribuição da Carteira</h2>
+      <div class="chart-wrapper">
+        <canvas id="chartCarteira"></canvas>
+      </div>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div class="form-card">
+      <h2 class="form-title">Adicionar Investimento</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome</label>
+          <input type="text" id="nomeInvest" placeholder="Ex: CDB Nubank, PETR4..."/>
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <select id="tipoInvest">
+            <option value="Renda Fixa">🏦 Renda Fixa</option>
+            <option value="Ações">📈 Ações</option>
+            <option value="FII">🏢 FII</option>
+            <option value="Cripto">🪙 Cripto</option>
+            <option value="Poupança">💰 Poupança</option>
+            <option value="Tesouro Direto">🇧🇷 Tesouro Direto</option>
+            <option value="Outro">📦 Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Instituição</label>
+          <input type="text" id="instInvest" placeholder="Ex: Nubank, XP, Rico..."/>
+        </div>
+        <div class="form-group">
+          <label>Valor Investido (R$)</label>
+          <input type="number" id="valorInvest" placeholder="0,00" step="0.01"/>
+        </div>
+        <div class="form-group">
+          <label>Rendimento Atual (R$)</label>
+          <input type="number" id="rendInvest" placeholder="0,00" step="0.01"/>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="adicionarInvestimento()">+ Adicionar</button>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Instituição</th>
+            <th>Investido</th>
+            <th>Rendimento</th>
+            <th>Total</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaInvestimentos">
+          <tr><td colspan="7" class="empty-msg">Nenhum investimento cadastrado.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script src="../app.js"></script>
+  <script src="../pages.js"></script>
+  <script>initInvestimentos();</script>
+</body>
+</html>
